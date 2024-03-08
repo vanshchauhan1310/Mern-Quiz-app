@@ -39,4 +39,12 @@ margin-top: 30px;
   .btn:hover {
     background-color: #45a049; /* Darker green background on hover */
   }
-  
+  .welcome-container {
+    text-align: center;
+    margin-top: 50px;
+  }
+  .welcome-heading {
+    font-size: 24px; /* Adjust the font size as needed */
+    color: #333; /* Adjust the color as needed */
+    /* Add any other styling you want for the heading */
+  }

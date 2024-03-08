@@ -1,10 +1,29 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './home.css';
 
 const Home = () => {
   const formRef = useRef(null);
   const [name, setName] = useState('');
-  const [loggedIn, setLoggedIn] = useState(false); // State to track login status
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [questions, setQuestions] = useState([]);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+
+  useEffect(() => {
+    // Load questions from JSON file
+    fetch('questions.json')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to fetch questions');
+        }
+        return response.json();
+      })
+      .then(data => {
+        setQuestions(data);
+      })
+      .catch(error => {
+        console.error('Error fetching questions:', error);
+      });
+  }, []);
 
   const handleChange = (event) => {
     setName(event.target.value);
@@ -12,17 +31,16 @@ const Home = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (name.trim() !== '') { // Check if the name is not empty
+    if (name.trim() !== '') {
       console.log("User is logged in");
-      setLoggedIn(true); // Set login status to true
+      setLoggedIn(true);
     } else {
-      alert("Please enter your name."); // Show an alert if the name is empty
+      alert("Please enter your name.");
     }
   };
 
   if (loggedIn) {
-    // Redirect user to the welcome page if logged in
-    return <WelcomePage name={name} />;
+    return <WelcomePage name={name} questions={questions} />;
   }
 
   return (
@@ -57,12 +75,18 @@ const Home = () => {
   );
 };
 
-const WelcomePage = ({ name }) => {
+const WelcomePage = ({ name, questions }) => {
   return (
-    <div>
-      <h2>Welcome, {name}!</h2>
-      {/* Additional content for the welcome page */}
-    </div>
+    <>
+      <div className="welcome-container">
+        <h2 className="welcome-heading">Welcome, {name}!</h2>
+        {questions.map((ques, index) => (
+          <div className="quesid" key={index}>
+            <b>{ques.question}</b>
+          </div>
+        ))}
+      </div>
+    </>
   );
 };
 
