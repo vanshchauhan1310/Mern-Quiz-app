@@ -6,25 +6,22 @@ const Home = () => {
   const [name, setName] = useState('');
   const [loggedIn, setLoggedIn] = useState(false);
   const [questions, setQuestions] = useState([]);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
   useEffect(() => {
-    // Load questions from JSON file
-    fetch('questions.json')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Failed to fetch questions');
-        }
-        return response.json();
-      })
+    fetchQuestions();
+  }, []);
+
+  const fetchQuestions = () => {
+    fetch('http://localhost:3001')
+      .then(response => response.json())
       .then(data => {
         setQuestions(data);
       })
       .catch(error => {
         console.error('Error fetching questions:', error);
       });
-  }, []);
-
+  };
+  
   const handleChange = (event) => {
     setName(event.target.value);
   };
@@ -68,7 +65,7 @@ const Home = () => {
                 <button type="submit" onClick={handleSubmit} className="btn">Submit</button>
               </form>
             </div>
-          </div>
+          </div>;
         </section>
       </main>
     </>
@@ -76,18 +73,65 @@ const Home = () => {
 };
 
 const WelcomePage = ({ name, questions }) => {
+  const [selectedAnswers, setSelectedAnswers] = useState(Array(questions.length).fill(null));
+  const [showResult, setShowResult] = useState(false);
+
+  const handleAnswerSelect = (questionIndex, optionIndex) => {
+    const newSelectedAnswers = [...selectedAnswers];
+    newSelectedAnswers[questionIndex] = optionIndex;
+    setSelectedAnswers(newSelectedAnswers);
+  };
+
+  const handleSubmit = async () => {
+    // Calculate score
+    let score = 0;
+    for (let i = 0; i < questions.length; i++) {
+      if (selectedAnswers[i] === questions[i].options.indexOf(questions[i].correctAnswer)) {
+        score++;
+      }
+    }
+  
+    // Display result
+    setShowResult(true);
+    alert(`Dear ${name}, your score is: ${score}/${questions.length}`);
+  
+  }
+  
   return (
     <>
       <div className="welcome-container">
         <h2 className="welcome-heading">Welcome, {name}!</h2>
+      </div>
+
+      <div className="question-container">
         {questions.map((ques, index) => (
-          <div className="quesid" key={index}>
-            <b>{ques.question}</b>
+          <div className="ques" key={index}>
+            <b>{ques.id} {ques.question}</b>
+            <div className="options">
+              <ul>
+                {ques.options.map((option, idx) => (
+                  <li key={idx}>
+                    <input 
+                      type="radio" 
+                      onChange={() => handleAnswerSelect(index, idx)} 
+                      checked={selectedAnswers[index] === idx} 
+                    />
+                    <label htmlFor={`option_${index}_${idx}`}>{option}</label>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         ))}
+    <button onClick={handleSubmit} className="btn submit-btn">Submit</button>
+
       </div>
+
+      {showResult && (
+        <div>
+          {/* Result will be displayed here */}
+        </div>
+      )}
     </>
   );
-};
-
-export default Home;
+};export default Home;

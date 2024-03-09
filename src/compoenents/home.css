@@ -39,12 +39,57 @@ margin-top: 30px;
   .btn:hover {
     background-color: #45a049; /* Darker green background on hover */
   }
-  .welcome-container {
+  .welcome-container{
     text-align: center;
-    margin-top: 50px;
+    margin-top: 20px;
   }
   .welcome-heading {
     font-size: 24px; /* Adjust the font size as needed */
     color: #333; /* Adjust the color as needed */
     /* Add any other styling you want for the heading */
   }
+
+  .ques{
+    margin-left: 50px;
+  }
+
+  /* home.css */
+.options {
+  margin-top: 10px;
+}
+
+.options ul {
+  list-style-type: none;
+  padding: 0;
+  margin-left: 20px;
+}
+
+.options li {
+  margin-bottom: 5px;
+}
+
+.options input[type="radio"] {
+  margin-right: 5px;
+}
+
+.Question-container{
+  margin-top: 20px;
+}
+
+.submit-btn {
+  background-color: #4CAF50; /* Green background */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.submit-btn:hover {
+  background-color: #45a049; /* Darker green on hover */
+}
